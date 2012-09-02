@@ -4,7 +4,7 @@ Donate Link:
 Tags: avatars, buddypress, doppelme, avatar
 Requires at least: 3.3.1 & Buddypress 1.5.4
 Tested up to: 3.4.1
-Stable tag: 
+Stable tag: 1.0
 
 Adds user editable avatars to Buddypress. Users can create and edit their own avatars within your BuddyPress installation.
 
@@ -48,6 +48,9 @@ Yes, just visit http://partner.doppelme.com to modify the items that are availab
 * None
 
 == Changelog ==
+**Version 1.00**
+
+* First version marked as stable
 
 **Version 0.13**
 

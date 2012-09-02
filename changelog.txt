@@ -1,8 +1,11 @@
+1.00
+==========
+ + Marked as stable
+
 0.13
 ==========
  + bug fix: corrected avatar choice images when importing pre-existing avatars
  
-
 
 0.12
 ==========
