@@ -1,4 +1,22 @@
 <?php
+$doppelme_api = new DoppelMe(0, '');
+
+function doppelme_api_version()    
+{		
+	global $doppelme_api;	
+	return $doppelme_api->version();	       
+
+}
+    
+function doppelme_test_permissions()    
+{   
+	global $doppelme_api;		
+	$doppelme_api->setPartnerId(get_option('doppelme_partner_id'));
+	$doppelme_api->setPartnerKey(get_option('doppelme_partner_key'));
+		
+	return $doppelme_api->check_has_permissions() ? 1 : 0;  
+}
+
 
 function register_mysettings() {
     register_setting( 'doppelme-settings-group', 'page' );
@@ -14,7 +32,9 @@ add_action( 'admin_init', 'register_mysettings' );
 
 function bp_doppelme_admin() {
 	global $bp;
-
+    global $doppelme_api;
+    $doppelme_api->setPartnerId(strval(get_option('doppelme_partner_id')));
+	$doppelme_api->setPartnerKey(strval(get_option('doppelme_partner_key')));    
     $update_message = '';
 	if ( isset( $_POST['submit1'] ) && check_admin_referer('doppelme-settings') ) {
        
@@ -22,9 +42,7 @@ function bp_doppelme_admin() {
             $update_message = 'Your DoppelMe Partner ID should be numeric. Please double-check your entry.';            
         } elseif ( (int)$_POST['doppelme_partner_id'] != $_POST['doppelme_partner_id'] ) {
             $update_message = 'Your DoppelMe Partner ID doesn\'t look right. Please double-check your entry.';
-            
         } else {
-			
             update_option( 'doppelme_partner_id', $_POST['doppelme_partner_id'] );
             update_option( 'doppelme_partner_key', $_POST['doppelme_partner_key'] );
             update_option( 'doppelme_partner_valid', doppelme_test_permissions() );
@@ -35,17 +53,12 @@ function bp_doppelme_admin() {
     
     if ( isset( $_POST['submit2'] ) && check_admin_referer('doppelme-settings') ) {
        
-        
         if ( $_POST['doppelme_allow_guest_gravatars'] == "Y" ) {		
-            //update_option( 'doppelme_allow_guest_gravatars', 'Y' );
-            
             delete_option( 'doppelme_allow_guest_gravatars' );
             add_option( 'doppelme_allow_guest_gravatars', 'Y', '', 'yes' );
         } else {
             delete_option( 'doppelme_allow_guest_gravatars' );
             add_option( 'doppelme_allow_guest_gravatars', 'N', '', 'yes' );
-            
-            //update_option( 'doppelme_allow_guest_gravatars', 'N' );			            
         }
         $update_message = 'Preferences updated.';            
 	}
@@ -60,6 +73,8 @@ function bp_doppelme_admin() {
     $partner_key = get_option( 'doppelme_partner_key' );
     $allow_gravatars = get_option( 'doppelme_allow_guest_gravatars', 'N' );
 	
+    //always force a recheck
+    update_option( 'doppelme_partner_valid', doppelme_test_permissions() );
 	
 ?>
 	<div class="wrap">
@@ -72,8 +87,6 @@ function bp_doppelme_admin() {
 		}
 		?>
 		
-		
-        
         <div style="font-size: 18px;margin-top: 30px;">DoppelMe Avatar Install Status</div>
 		
 		<table style="width: 760px;">
@@ -228,34 +241,5 @@ function bp_doppelme_admin() {
 	
 	
 <?php
-}
-
-
-
-
-
-function doppelme_api_version()    
-{	
-	$client = new SoapClient( BP_DOPPELME_SERVICE , array('trace' => 1)  ); 		       
-	return($client->Version()->VersionResult);	
-}
-    
-function doppelme_test_permissions()    
-{        
-		
-	$DM_PARTNER_ID  = get_option('doppelme_partner_id');
-	$DM_PARTNER_KEY = get_option('doppelme_partner_key');
-	
-	//Simple test getting details of avatar associated with UserID = 1
-	//(Note that it doesnt matter whether this user has an avatar account, we
-	//are just interested in the whether we get an access denied error)
-	$status = GetUserDetails($DM_PARTNER_ID, $DM_PARTNER_KEY, 1, "StatusInfo");
-	
-	
-	if ($status == '"Access denied"') {
-		return 0;
-	} else {
-		return 1;
-	}
 }
 ?>

@@ -124,6 +124,28 @@ function bp_doppelme_profile_page() {
 add_action('xprofile_setup_nav', 'bp_doppelme_profile_page'); 
 
 
+function bp_plugin_load_template_filter( $found_template, $templates ) {
+    //Only filter the template location when we're on the bp-plugin component pages.
+   // if ( !bp_is_current_component( 'bp-plugin' ) )
+   //     return $found_template;
+    global $bp;
+    foreach ( (array) $templates as $template ) {
+        if ( file_exists( STYLESHEETPATH . '/' . $template ) )
+            $filtered_templates[] = STYLESHEETPATH . '/' . $template;
+        elseif( file_exists(TEMPLATEPATH . '/' . $template ) )
+            $filtered_templates[] = TEMPLATEPATH . '/' . $template;
+        elseif ($bp->current_action == 'change-avatar') {
+            //$filtered_templates[] = BP_PLUGIN_DIR . '/bp-themes/bp-default/' . $template;
+            $filtered_templates[] = BP_PLUGIN_DIR . '../doppelme-avatars/templates/' . $template;
+        }
+    } 
+    $found_template = $filtered_templates[0]; 
+    return apply_filters( 'bp_plugin_load_template_filter', $found_template );
+}
+ 
+add_filter( 'bp_located_template', 'bp_plugin_load_template_filter', 10, 2 );
+
+
 function show_avatar_engine()
 {
     add_action( 'bp_template_title', 'doppelme_avatar_engine_title' );
@@ -145,57 +167,39 @@ function doppelme_avatar_engine_content()
 {
 
     global $bp;
+	$doppelme_api = new DoppelMe(0, '');
     
     $user = $bp->loggedin_user; 
-    $DM_PARTNER_ID  = get_option('doppelme_partner_id');
-    $DM_PARTNER_KEY = get_option('doppelme_partner_key');
+    
+    $doppelme_api->setPartnerId(get_option('doppelme_partner_id'));
+	$doppelme_api->setPartnerKey(get_option('doppelme_partner_key'));
             
     $sDOPPELME_KEY = get_user_meta($user->id, "doppelme_key", true);
-    
     
     if ( $_POST['retrieve'] ) {
         
         $Username  = $_POST['username'];
         $Shadowkey = $_POST['shadowkey'];
     
-        
         if ( $Username != '' && $Shadowkey != '') {
-            $sURL		= "AssignPartnerUserID";			
-            $sDATA		= array("partner_id" 	=> $DM_PARTNER_ID, 
-                        "partner_key" 		    => $DM_PARTNER_KEY,
-                        "partner_user_id" 	    => $user->id, 
-                        "doppelme_username" 	=> $Username, 
-                        "doppelme_shadow_key" 	=> $Shadowkey,
-                        "is_test" 		=> false
-                        );
-            
-             
-            $result	= PartnerServiceCall($sURL, array($sDATA) );		                       
-            
-            $xmlDoc 		    = simplexml_load_string( $result->AssignPartnerUserIDResult );
-            $sDOPPELME_KEY		= $xmlDoc->DoppelMeKey;
-            $sVALIDATION_KEY	= $xmlDoc->ValidationKey;
-            $sSTATUS		    = $xmlDoc->StatusCode;	
-            
-                        
-            if ( $sSTATUS != 0 ) {
+			$result = $doppelme_api->assign_user_id($user->id, $Username, $Shadowkey);
+            if ( $result['StatusCode'] != 0 ) {
                 //error message returned - perhaps invalid shadow key supplied				
                 die();
             } else	{
-                //sanitize user input		
-                $sDOPPELME_KEY = trim($sDOPPELME_KEY) . '';					
+				
+				$sDOPPELME_KEY = $result['DoppelMeKey'];							
                 if ( $sDOPPELME_KEY != "" and $sDOPPELME_KEY != "N/A" ) {
                     update_user_meta( $user->id, "doppelme_key", $sDOPPELME_KEY , true ); 
                 }
                 
                 //loop through available avatars (user may have more than one) and format them, offering
                 //user to select which one he would like to use on your site
-                $iCount = 0;                   
-                foreach ($xmlDoc->DoppelMeNames->children() as $item) {            
+				$sSELECT = '';
+				foreach ($result['DoppelMeNames'] as $item) {
                     
-                    $sKey = $item[0];
-                    $sName = $item->attributes();
-                    $sName = $sName["name"];
+					$sKey = $item['key'];
+					$sName = $item['name'];
                     
                     if ($sKey == $sDOPPELME_KEY) {
                         $sSELECT = $sSELECT  . "<td><img src=" . BP_DOPPELME_SITE . "/50/" . urlencode($sKey) . "/cropb.png><br/>"; 
@@ -204,23 +208,19 @@ function doppelme_avatar_engine_content()
                         $sSELECT = $sSELECT  . "<td><img src=" . BP_DOPPELME_SITE . "/50/" . urlencode($sKey) . "/cropb.png><br/>" .
                         $sName . "<br/><input type=radio name=doppelme_key value=\"" . $sKey . "\" ></td>";
                     }
-                    
-                    $iCount++;                        
                 }
-                
-                                 
-                $sSELECT = "<table><tr>" . $sSELECT . "</tr><tr><td colspan=" . $iCount . " style=\"text-align: center;\"><input type=submit name=\"Select &raqno;\"></td></tr></table>";				
+				$sSELECT = "<table><tr>" . $sSELECT . "</tr><tr><td colspan=" . count($result['DoppelMeNames']) . " style=\"text-align: center;\"><input type=submit name=\"Select &raqno;\"></td></tr></table>";				                                
             }		
         } 
      
     } elseif ($_POST['create_new'] && $sDOPPELME_KEY == '' ) {            
-        
-        $sDOPPELME_KEY = CreateDoppelMeAccount($DM_PARTNER_ID, $DM_PARTNER_KEY, $user->id, $user->userdata->user_nicename);
+		$result = $doppelme_api->create_user_account($user->id, $user->userdata->user_nicename);		
+        //$sDOPPELME_KEY = $result['DoppelMeKey'] ;
+        $sDOPPELME_KEY = $result;
         if (  $sDOPPELME_KEY != '' ) {                        
             update_user_meta( $user->id, "doppelme_key", $sDOPPELME_KEY , true );                
         }                                 
     }
-    
     
     $sDOPPELME_KEY = get_user_meta($user->id, "doppelme_key", true);
     
@@ -341,10 +341,10 @@ function doppelme_avatar_engine_content()
         //  
         $sLANG = "EN";
         $sCALLBACK_URL = $bp->loggedin_user->domain . $bp->profile->slug . '/change-avatar/?view=saved';    
-        $sVALIDATION_KEY = GetUserValidationKey($DM_PARTNER_ID, $DM_PARTNER_KEY, $user->id);
+		$sVALIDATION_KEY = $doppelme_api->get_user_validation_key($user->id);
         
         if ($sVALIDATION_KEY != '') {
-            $iframe_url = 	BP_DOPPELME_SITE . "/partner/partner_validate.asp?stripped=yes&pid=" . $DM_PARTNER_ID . 
+            $iframe_url = 	BP_DOPPELME_SITE . "/partner/partner_validate.asp?stripped=yes&pid=" . get_option('doppelme_partner_id') . 
             "&puid=" . $user->id . "&validkey=" . $sVALIDATION_KEY . "&doppelmekey=" . $sDOPPELME_KEY . "&lang=" . $sLANG . "&callback=" . urlencode($sCALLBACK_URL);
             
             $engine = 

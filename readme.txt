@@ -3,8 +3,8 @@ Contributors: doppelme
 Donate Link: 
 Tags: avatars, buddypress, doppelme, avatar
 Requires at least: 3.3.1 & Buddypress 1.5.4
-Tested up to: 3.4.1
-Stable tag: 1.0
+Tested up to: 3.6.0
+Stable tag: 1.02
 
 Adds user editable avatars to Buddypress. Users can create and edit their own avatars within your BuddyPress installation.
 
@@ -36,6 +36,11 @@ Requires SOAP and Simple XML PHP modules (normally installed as standard)
 Yes, just visit http://partner.doppelme.com to modify the items that are available to your users.
 
 
+= I get Access Permission Failed message. How can I resolve? =
+
+Got to http://partner.doppelme.com and add your site's IP address to the whitelist. Alternatively, if you don't know your IP address, enter * to match all addresses.
+
+
 == Screenshots ==
 
 1. The avatar editor as part of the users profile area
@@ -48,7 +53,18 @@ Yes, just visit http://partner.doppelme.com to modify the items that are availab
 * None
 
 == Changelog ==
-**Version 1.00**
+
+**Version 1.02**
+
+* Support for 1.7 theme compatibility
+* Tested with BP 1.7.2
+
+**Version 1.01**
+
+* Force re-check of access permissions from admin panel
+* Tested with BP 1.6.4
+
+**Version 1.00
 
 * First version marked as stable
 

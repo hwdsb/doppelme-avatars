@@ -1,3 +1,12 @@
+1.02
+==========
+ + support for bp 1.7 themes
+
+1.01
+==========
+ + update to re-check access permissions on admin panel (to ensure that changes to access permissions are picked up immediately)
+
+
 1.00
 ==========
  + Marked as stable
