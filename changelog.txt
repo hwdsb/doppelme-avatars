@@ -1,5 +1,9 @@
 1.02
 ==========
+ + correction for missing files
+
+1.02
+==========
  + support for bp 1.7 themes
 
 1.01
