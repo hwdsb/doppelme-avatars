@@ -54,6 +54,10 @@ Got to http://partner.doppelme.com and add your site's IP address to the whiteli
 
 == Changelog ==
 
+**Version 1.03**
+
+* Correction for missing files
+
 **Version 1.02**
 
 * Support for 1.7 theme compatibility
