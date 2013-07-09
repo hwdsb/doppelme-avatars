@@ -4,7 +4,7 @@
 Plugin Name: DoppelMe Avatars
 Plugin URI: http://www.doppelme.com
 Description: Allow your users to create their own avatars within your BuddyPress installation.
-Version: 1.03
+Version: 1.04
 Author: DoppelMe
 License: GPL2
 */

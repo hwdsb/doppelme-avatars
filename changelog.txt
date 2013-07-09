@@ -1,3 +1,7 @@
+1.04
+==========
+ + removal of whitespace
+ 
 1.03
 ==========
  + correction for missing files
