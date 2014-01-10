@@ -1,11 +1,11 @@
 <?php
 
 /*
-Plugin Name: DoppelMe Avatars
+Plugin Name: DoppelMe Avatars (HWDSB Version)
 Plugin URI: http://www.doppelme.com
-Description: Allow your users to create their own avatars within your BuddyPress installation.
-Version: 1.04
-Author: DoppelMe
+Description: Allow your users to create their own avatars within your BuddyPress installation. This version caches avatars locally.
+Version: 1.05
+Author: DoppelMe, Bob Fowler
 License: GPL2
 */
 
