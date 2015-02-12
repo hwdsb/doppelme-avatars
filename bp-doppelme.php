@@ -362,7 +362,9 @@ class BP_Doppelme_Screen {
 		$iframe_url = sprintf( $iframe_url, $host, $partner_id, bp_displayed_user_id(), $validation_key, $doppelme_key, $callback, $lang );
 	?>
 
-		<iframe src="<?php echo esc_url( $iframe_url ); ?>" style="overflow:hidden;width:660px;height:400px;border:0;border-collapse: collapse;margin:0 auto;" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" vspace="5" hspace="0"></iframe>
+		<div style="width:640px;height:400px;">
+			<iframe src="<?php echo esc_url( $iframe_url ); ?>" style="width:640px;height:400px;border:0;border-collapse:collapse;" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" vspace="5" hspace="0"></iframe>
+		</div>
 
 		<a href="<?php bpdpl_the_disconnection_url(); ?>"><?php _e( 'Remove DoppelMe', 'bp-doppelme' ); ?></a>
 	<?php
