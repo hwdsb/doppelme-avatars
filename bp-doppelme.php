@@ -2,6 +2,7 @@
 /*
 Plugin Name: BP DoppelMe
 Description: Integrate DoppelMe Avatars with BuddyPress
+Version: 2.0
 Author: r-a-y
 Author URI: http://profiles.wordpress.org/r-a-y
 */
