@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: BP DoppelMe
-Description: Integrate DoppelNe Avatars with BuddyPress
+Description: Integrate DoppelMe Avatars with BuddyPress
 Author: r-a-y
 Author URI: http://profiles.wordpress.org/r-a-y
 */
