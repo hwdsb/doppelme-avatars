@@ -125,6 +125,9 @@ class BP_Doppelme {
 
 		// edit xprofile toolbar nav
 		add_filter( 'bp_xprofile_admin_nav', array( $this, 'edit_toolbar_nav' ) );
+
+		// edit "Edit Member" admin menu
+		add_action( 'admin_bar_menu',        array( $this, 'edit_user_admin_menu' ), 999 );
 	}
 
 	/**
@@ -174,6 +177,35 @@ class BP_Doppelme {
 		return $retval;
 	}
 
+	/**
+	 * Edit BP's "Edit Member" adminbar menu.
+	 *
+	 * @param WP_Admin_Bar $wp_admin_bar
+	 */
+	public function edit_user_admin_menu( $wp_admin_bar ) {
+		// Only show if viewing a user
+		if ( ! bp_is_user() ) {
+			return false;
+		}
+
+		// Don't show this menu to non site admins or if you're viewing your own profile
+		if ( ! current_user_can( 'edit_users' ) || bp_is_my_profile() ) {
+			return;
+		}
+
+		if ( ! bp_is_active( 'xprofile' ) ) {
+			return;
+		}
+
+		if ( buddypress()->avatar->show_avatars ) {
+			$wp_admin_bar->add_menu( array(
+				'parent' => buddypress()->user_admin_menu_id,
+				'id'     => buddypress()->user_admin_menu_id . '-change-avatar',
+				'title'  => __( "Edit Profile Picture", 'bp-doppelme' ),
+				'href'   => bp_get_members_component_link( 'profile', buddypress()->doppelme->slug )
+			) );
+		}
+	}
 }
 
 /**
