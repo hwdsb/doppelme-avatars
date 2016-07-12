@@ -165,6 +165,10 @@ class BP_Doppelme {
 	 * @return array
 	 */
 	public function edit_toolbar_nav( $retval ) {
+		if ( empty( $retval ) ) {
+			return $retval;
+		}
+
 		$slug = buddypress()->doppelme->slug;
 
 		foreach ( $retval as $key => $nav ) {
