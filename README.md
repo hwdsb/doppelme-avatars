@@ -1,10 +1,19 @@
 # doppelme-avatars
-DoppelMe avatars integration with BuddyPress.
 
-This plugin completely replaces the upload avatar functionality within a BuddyPress community with the Doppelme Avatar creator. 
+[DoppelMe avatars](http://doppelme.com/) integration with BuddyPress.
 
-You'll need to register your website via this link: http://partner.doppelme.com/register.php, then whitelist the IP address your site is hosted on.
+This plugin completely replaces the upload avatar functionality within a BuddyPress community with the DoppelMe Avatar creator. 
 
-Once you have these, place this in your wp-config.php file with the partner ID and Key
+You'll need to register your website via this link:<br>
+https://partner.doppelme.com/register.php
+
+Then whitelist the IP address your site is hosted on.
+
+Once registered, get your partner ID and key and place it in your `wp-config.php` file:
+
+```
 define( 'BP_DOPPELME_PARTNER_ID',  'XXX' );
 define( 'BP_DOPPELME_PARTNER_KEY', 'XXX' );
+```
+
+If you do not see the DoppelMe creator, ensure that PHP on your server is compiled with [SOAP](https://secure.php.net/manual/en/soap.installation.php).
