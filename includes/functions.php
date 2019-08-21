@@ -83,7 +83,11 @@ function bpdpl_mirror_avatar( $user_id = 0 ) {
 		'test_form' => false,
 	);
 
-	// add BP's avatar upload directory filter
+	// Remove existing filters for upload directory.
+	remove_all_filters( 'upload_dir' );
+	remove_all_filters( 'wp_handle_sideload_prefilter' );
+
+	// Add BP's avatar upload directory filter.
 	add_filter( 'upload_dir', 'xprofile_avatar_upload_dir', 10, 0 );
 
 	// "move it, move it"
