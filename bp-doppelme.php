@@ -128,15 +128,17 @@ class BP_Doppelme {
 
 		// edit "Edit Member" admin menu
 		add_action( 'admin_bar_menu',        array( $this, 'edit_user_admin_menu' ), 999 );
+
+		// Bye, bye BP avatars!
+		add_action( 'bp_setup_nav', function() {
+			bp_core_remove_subnav_item( 'profile', 'change-avatar' );
+		} );
 	}
 
 	/**
 	 * Manipulate BP profile sub-navigation tabs.
 	 */
 	public function add_subnav() {
-		// Bye, bye BP avatars!
-		bp_core_remove_subnav_item( 'profile', 'change-avatar' );
-
 		// Determine user to use
 		if ( bp_displayed_user_domain() ) {
 			$user_domain = bp_displayed_user_domain();
