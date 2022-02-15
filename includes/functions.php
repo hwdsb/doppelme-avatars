@@ -51,11 +51,11 @@ function bpdpl_mirror_avatar( $user_id = 0 ) {
 
 	// set up some variables we'll need
 	$user_key   = bpdpl_get_user_key( $user_id );
-	$full_size  = bp_core_avatar_full_width();
-	$thumb_size = bp_core_avatar_thumb_width();
+	$full_size  = (int) bp_core_avatar_full_width();
+	$thumb_size = (int) bp_core_avatar_thumb_width();
 
 	// download doppelme avatars
-	$temp_avatar_full  = download_url( apply_filters( 'bpdpl_get_avatar_full_url', "http://www.doppelme.com/75/{$user_key}/avatar.png?canvas_width=200" ) );
+	$temp_avatar_full  = download_url( apply_filters( 'bpdpl_get_avatar_full_url', "http://www.doppelme.com/200/{$user_key}/avatar.png" ) );
 	$temp_avatar_thumb = download_url( apply_filters( 'bpdpl_get_avatar_thumb_url', "http://www.doppelme.com/{$thumb_size}/{$user_key}/crop.png" ) );
 
 	// setup the parameters to move the avatars
