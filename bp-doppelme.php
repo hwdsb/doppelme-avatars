@@ -332,9 +332,9 @@ class BP_Doppelme_Screen {
 
 		<h3 style="float:left;"><?php _e( 'Create a New Profile Picture with DoppelMe', 'bp-doppelme' ); ?></h3>
 
-		<img alt="<?php _e( 'Example of a Doppelme profile picture', 'bp-doppelme' ); ?>" title="<?php _e( 'Example of a Doppelme profile picture', 'bp-doppelme' ); ?>" src="http://doppelme.com/images/examples/fade6.gif" style="float:right;border:0;box-shadow:none;" />
+		<img alt="<?php _e( 'Example of a Doppelme profile picture', 'bp-doppelme' ); ?>" title="<?php _e( 'Example of a Doppelme profile picture', 'bp-doppelme' ); ?>" src="https://www.doppelme.com/img/examples/fade6.gif" style="float:right;border:0;box-shadow:none;" />
 
-		<p style="clear:left;"><?php _e( 'With <a href="http://www.doppelme.com">DoppelMe</a>, you can create a cool, graphical likeness of yourself for use as your profile picture on this site.', 'bp-doppelme' ); ?></p>
+		<p style="clear:left;"><?php _e( 'With <a href="https://www.doppelme.com">DoppelMe</a>, you can create a cool, graphical likeness of yourself for use as your profile picture on this site.', 'bp-doppelme' ); ?></p>
 
 		<p><?php _e( 'Get started by clicking on the <strong>Create</strong> button below:', 'bp-doppelme' ); ?></p>
 
