@@ -88,14 +88,27 @@ function bpdpl_mirror_avatar( $user_id = 0 ) {
 	remove_all_filters( 'wp_handle_sideload_prefilter' );
 
 	// Add BP's avatar upload directory filter.
-	add_filter( 'upload_dir', 'xprofile_avatar_upload_dir', 10, 0 );
+	if ( function_exists( 'bp_members_avatar_upload_dir' ) ) {
+		$upload_dir = function() use ( $user_id ) {
+			return bp_members_avatar_upload_dir( 'avatars', $user_id );
+		};
+
+		add_filter( 'upload_dir', $upload_dir, 10 );
+
+	} else {
+		add_filter( 'upload_dir', 'xprofile_avatar_upload_dir', 10 );
+	}
 
 	// "move it, move it"
 	$move_full  = wp_handle_sideload( $avatar_full,  $overrides );
 	$move_thumb = wp_handle_sideload( $avatar_thumb, $overrides );
 
 	// remove BP's avatar upload directory filter
-	remove_filter( 'upload_dir', 'xprofile_avatar_upload_dir', 10, 0 );
+	if ( function_exists( 'bp_members_avatar_upload_dir' ) ) {
+		remove_filter( 'upload_dir', $upload_dir, 10 );
+	} else {
+		remove_filter( 'upload_dir', 'xprofile_avatar_upload_dir', 10 );
+	}
 
 	// remove temp files
 	@unlink( $temp_avatar_full );
